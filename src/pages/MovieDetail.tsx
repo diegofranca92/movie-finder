@@ -13,7 +13,7 @@ export default function MovieDetail() {
 
   async function getMovie() {
     try {
-      const { data } = await api.get(`/${params.id}?language=pt-BR`)
+      const { data } = await api.get(`/movie/${params.id}?language=pt-BR`)
       console.log(data);
       setMovieDetail(data)
     } catch (e) {

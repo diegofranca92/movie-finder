@@ -5,55 +5,32 @@ import api from "../services/api";
 export default function Home() {
 
   const [movieList, setMovieList] = useState<Movie.IMovie[]>([])
+  const [movieGenre, setMovieGenre] = useState<Movie.IGenre[]>([])
 
 
   async function getMovies() {
     try {
-      const { data } = await api.get('popular?language=pt-BR&page=1')
+      const { data } = await api.get('/movie/popular?language=pt-BR&page=1')
       console.log(data.results);
       setMovieList(data.results)
     } catch (e) {
       console.log(e);
     }
   }
-
-  const categoryFilters = [
-    {
-      name: 'Ação'
-    },
-    {
-      name: 'Drama'
+  async function getGenres() {
+    try {
+      const { data } = await api.get('/genre/movie/list?language=pt-BR')
+      console.log(data.genres);
+      setMovieGenre(data.genres)
+    } catch (e) {
+      console.log(e);
     }
-  ]
+  }
+
 
   useEffect(() => {
     getMovies()
-    // setMovieList([
-    //   {
-    //     id: 1,
-    //     title: 'Movie Teste lista'
-    //   },
-    //   {
-    //     id: 2,
-    //     title: 'Movie Teste lista'
-    //   },
-    //   {
-    //     id: 3,
-    //     title: 'Movie Teste lista'
-    //   },
-    //   {
-    //     id: 4,
-    //     title: 'Movie Teste lista'
-    //   },
-    //   {
-    //     id: 5,
-    //     title: 'Movie Teste lista'
-    //   },
-    //   {
-    //     id: 6,
-    //     title: 'Movie Teste lista'
-    //   },
-    // ])
+    getGenres()
   }, [])
 
 
@@ -67,8 +44,8 @@ export default function Home() {
         </form>
         <section className="mt-8">
           <h5 className="uppercase mb-4">Filtrar por:</h5>
-          <div className="flex gap-4 justify-center">
-            {categoryFilters.map(category => (
+          <div className="flex gap-4 flex-wrap justify-center">
+            {movieGenre?.map(category => (
               <button key={category.name} className="bg-white rounded-sm px-4 p-1 text-black hover:bg-gray-200">{category.name}</button>
             ))}
           </div>

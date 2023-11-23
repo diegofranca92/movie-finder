@@ -7,4 +7,9 @@ declare namespace Movie {
     overview?: string;
     vote_average?: number;
   }
+
+  interface IGenre {
+    id: number;
+    name: string;
+  }
 }
