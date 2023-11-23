@@ -5,11 +5,20 @@ declare namespace Movie {
     poster_path?: string;
     genres?: string[];
     overview?: string;
+    release_date?: string;
+    original_language?: string;
     vote_average?: number;
   }
 
   interface IGenre {
     id: number;
     name: string;
+  }
+
+  interface ICredit {
+    id: number;
+    name: string;
+    character: string;
+    profile_path?: string;
   }
 }

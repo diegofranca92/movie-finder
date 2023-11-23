@@ -10,7 +10,7 @@ export default function Home() {
 
   async function getMovies() {
     try {
-      const { data } = await api.get('/movie/popular?language=pt-BR&page=1')
+      const { data } = await api.get('/movie/now_playing?language=pt-BR&page=1')
       console.log(data.results);
       setMovieList(data.results)
     } catch (e) {

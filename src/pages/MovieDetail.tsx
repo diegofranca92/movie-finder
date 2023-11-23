@@ -1,14 +1,18 @@
 import { useState, useEffect } from 'react'
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import MovieCard from "../components/MovieCard";
 import api from "../services/api";
+import CreditsCard from '../components/CreditsCard';
 
 
 
 export default function MovieDetail() {
 
   const [movieDetail, setMovieDetail] = useState<Movie.IMovie>()
+  const [ratedFilms, setRatedFilms] = useState<Movie.IMovie[]>()
+  const [creditList, setCreditList] = useState<Movie.ICredit[]>()
   const params = useParams()
+  const navigate = useNavigate()
   const movieUrl = import.meta.env.VITE_IMG
 
   async function getMovie() {
@@ -20,55 +24,43 @@ export default function MovieDetail() {
       console.log(e);
     }
   }
+  async function getRated() {
+    try {
+      const { data } = await api.get(`/movie/top_rated?language=pt-BR&page=1`)
+      console.log(data.results);
+      setRatedFilms(data.results)
+    } catch (e) {
+      console.log(e);
+    }
+  }
+  async function getCredits() {
+    try {
+      const { data } = await api.get(`/movie/${params.id}/credits?language=pt-BR`)
+      console.log(data.cast);
+      setCreditList(data.cast)
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  // async function getGenres() {
+  //   try {
+  //     const { data } = await api.get('/genre/movie/list?language=pt-BR')
+  //     console.log(data.genres);
+  //     setMovieGenre(data.genres)
+  //   } catch (e) {
+  //     console.log(e);
+  //   }
+  // }
 
   useEffect(() => {
     getMovie()
+    getRated()
+    getCredits()
+    // getGenres()
   }, [])
 
-  const movieList = [
-    {
-      id: 1,
-      title: 'Movie Teste lista'
-    },
-    {
-      id: 2,
-      title: 'Movie Teste lista'
-    },
-    {
-      id: 3,
-      title: 'Movie Teste lista'
-    },
-    {
-      id: 4,
-      title: 'Movie Teste lista'
-    },
-    {
-      id: 5,
-      title: 'Movie Teste lista'
-    },
-    {
-      id: 6,
-      title: 'Movie Teste lista'
-    },
-    {
-      id: 5,
-      title: 'Movie Teste lista'
-    },
-    {
-      id: 6,
-      title: 'Movie Teste lista'
-    },
-    {
-      id: 5,
-      title: 'Movie Teste lista'
-    },
-    {
-      id: 6,
-      title: 'Movie Teste lista'
-    },
-  ]
-
-  return (
+ return (
     <div>
       <header className="bg-red-900 text-white p-12 flex gap-4">
         <img
@@ -78,8 +70,11 @@ export default function MovieDetail() {
           src={movieUrl + movieDetail?.poster_path}
           alt={movieDetail?.title} />
         <div>
-          <h1 className="text-3xl">{movieDetail?.title}</h1>
-          <p>16 anos + 11/02/2016 (BR) +
+          <div className='flex justify-between'>
+            <h1 className="text-3xl">{movieDetail?.title}</h1>
+            <button className='bg-transparent border-white border-2 px-2 hover:bg-white hover:text-black' onClick={() => navigate(-1)}>voltar</button>
+          </div>
+          <p>16 anos + {movieDetail?.release_date} ({movieDetail?.original_language}) +
             {/* {movieDetail?.genres?.map((gen:any) => gen.name.join(', '))} */}
           </p>
           <div className="flex my-4">
@@ -96,8 +91,8 @@ export default function MovieDetail() {
       <main className="m-12">
         <h3 className="text-xl font-bold mb-4">Elenco original</h3>
         <section className="flex w-7/12 gap-4 overflow-scroll overflow-y-hidden">
-          {movieList.map(movieInfo => (
-            <MovieCard key={movieInfo.id} movie={movieInfo} />
+          {creditList?.map(creditInfo => (
+            <CreditsCard key={creditInfo.id} credit={creditInfo} />
           ))}
         </section>
         <h3 className="text-xl font-bold mb-4 mt-12">Trailer</h3>
@@ -113,7 +108,7 @@ export default function MovieDetail() {
         </section>
         <h3 className="text-xl font-bold mb-4 mt-12">Recomendações</h3>
         <section className="flex w-7/12 gap-4 overflow-scroll overflow-y-hidden">
-          {movieList.map(movieInfo => (
+          {ratedFilms?.map(movieInfo => (
             <MovieCard key={movieInfo.id} movie={movieInfo} />
           ))}
         </section>
