@@ -1,9 +1,21 @@
 import MovieCard from "../components/MovieCard";
 import { useState, useEffect } from 'react'
+import api from "../services/api";
 
 export default function Home() {
 
   const [movieList, setMovieList] = useState<Movie.IMovie[]>([])
+
+
+  async function getMovies() {
+    try {
+      const { data } = await api.get('popular?language=pt-BR&page=1')
+      console.log(data.results);
+      setMovieList(data.results)
+    } catch (e) {
+      console.log(e);
+    }
+  }
 
   const categoryFilters = [
     {
@@ -15,32 +27,33 @@ export default function Home() {
   ]
 
   useEffect(() => {
-    setMovieList([
-      {
-        id: 1,
-        title: 'Movie Teste lista'
-      },
-      {
-        id: 2,
-        title: 'Movie Teste lista'
-      },
-      {
-        id: 3,
-        title: 'Movie Teste lista'
-      },
-      {
-        id: 4,
-        title: 'Movie Teste lista'
-      },
-      {
-        id: 5,
-        title: 'Movie Teste lista'
-      },
-      {
-        id: 6,
-        title: 'Movie Teste lista'
-      },
-    ])
+    getMovies()
+    // setMovieList([
+    //   {
+    //     id: 1,
+    //     title: 'Movie Teste lista'
+    //   },
+    //   {
+    //     id: 2,
+    //     title: 'Movie Teste lista'
+    //   },
+    //   {
+    //     id: 3,
+    //     title: 'Movie Teste lista'
+    //   },
+    //   {
+    //     id: 4,
+    //     title: 'Movie Teste lista'
+    //   },
+    //   {
+    //     id: 5,
+    //     title: 'Movie Teste lista'
+    //   },
+    //   {
+    //     id: 6,
+    //     title: 'Movie Teste lista'
+    //   },
+    // ])
   }, [])
 
 
@@ -56,7 +69,7 @@ export default function Home() {
           <h5 className="uppercase mb-4">Filtrar por:</h5>
           <div className="flex gap-4 justify-center">
             {categoryFilters.map(category => (
-              <button className="bg-white rounded-sm px-4 p-1 text-black hover:bg-gray-200">{category.name}</button>
+              <button key={category.name} className="bg-white rounded-sm px-4 p-1 text-black hover:bg-gray-200">{category.name}</button>
             ))}
           </div>
         </section>

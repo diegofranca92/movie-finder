@@ -1,10 +1,29 @@
+import { useState, useEffect } from 'react'
+import { useParams } from "react-router-dom";
 import MovieCard from "../components/MovieCard";
+import api from "../services/api";
 
-interface MovieDetailProps {
-  movie: Movie.IMovie
-}
 
-export default function MovieDetail({ movie }: MovieDetailProps) {
+
+export default function MovieDetail() {
+
+  const [movieDetail, setMovieDetail] = useState<Movie.IMovie>()
+  const params = useParams()
+  const movieUrl = import.meta.env.VITE_IMG
+
+  async function getMovie() {
+    try {
+      const { data } = await api.get(`/${params.id}?language=pt-BR`)
+      console.log(data);
+      setMovieDetail(data)
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  useEffect(() => {
+    getMovie()
+  }, [])
 
   const movieList = [
     {
@@ -52,19 +71,26 @@ export default function MovieDetail({ movie }: MovieDetailProps) {
   return (
     <div>
       <header className="bg-red-900 text-white p-12 flex gap-4">
-        <img className="-mb-20 shadow-md rounded-md" src="https://placehold.co/250x350" alt="" />
+        <img
+          className="-mb-20 shadow-md rounded-md"
+          width={250}
+          height={350}
+          src={movieUrl + movieDetail?.poster_path}
+          alt={movieDetail?.title} />
         <div>
-          <h1 className="text-3xl">movie.title</h1>
-          <p>16 anos + 11/02/2016 (BR) + Ficcao, Comedia</p>
+          <h1 className="text-3xl">{movieDetail?.title}</h1>
+          <p>16 anos + 11/02/2016 (BR) +
+            {/* {movieDetail?.genres?.map((gen:any) => gen.name.join(', '))} */}
+          </p>
           <div className="flex my-4">
             <span className="border-green-400 border-4 rounded-full p-2">
-              70 %
+              {movieDetail?.vote_average?.toFixed(1)}
             </span>
             Avaliação dos usuários
           </div>
 
           <h4 className="font-bold">Sinopse</h4>
-          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quos tenetur commodi, sed ad atque eligendi recusandae ut officia, id quaerat nulla cum architecto, quidem suscipit! Sequi officia deleniti eaque! Repellat.</p>
+          <p>{movieDetail?.overview}</p>
         </div>
       </header>
       <main className="m-12">
