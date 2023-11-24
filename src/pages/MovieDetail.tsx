@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import MovieCard from "../components/MovieCard";
 import api from "../services/api";
 import CreditsCard from '../components/CreditsCard';
+import { NavBar } from '../components/NavBar';
 
 
 
@@ -50,10 +51,8 @@ export default function MovieDetail() {
 
   return (
     <>
-      <div className='bg-rose-500 p-2 '>
-        <h3 className='font-bold text-white text-2xl'>TMDB <span className='bg-white px-8 ms-2 rounded-full'></span></h3>
-      </div>
-      <header className="bg-red-900 text-white p-12 flex md:flex-nowrap flex-wrap gap-4">
+      <NavBar />
+      <header className="bg-primary text-white p-12 flex md:flex-nowrap flex-wrap gap-4">
         <img
           className="md:-mb-20 shadow-md rounded-md"
           width={250}
@@ -66,7 +65,7 @@ export default function MovieDetail() {
             <button className='bg-transparent border-white border-2 px-2 hover:bg-white hover:text-black' onClick={() => navigate(-1)}>voltar</button>
           </div>
           <p>
-            {movieDetail?.adult ? '18 anos' : 'livre'} + {movieDetail?.release_date?.split('-').reverse().join('/')} 
+            {movieDetail?.adult ? '18 anos' : 'livre'} + {movieDetail?.release_date?.split('-').reverse().join('/')}
             ({movieDetail?.original_language?.toLocaleUpperCase()}) + {genreList?.map((gen: Movie.IGenre) => gen.name).join(', ')}
           </p>
           <div className="flex my-4">
