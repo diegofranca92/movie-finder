@@ -8,6 +8,7 @@ declare namespace Movie {
     release_date?: string;
     original_language?: string;
     vote_average?: number;
+    adult?: boolean;
   }
 
   interface IGenre {

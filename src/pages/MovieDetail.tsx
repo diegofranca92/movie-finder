@@ -11,6 +11,7 @@ export default function MovieDetail() {
   const [movieDetail, setMovieDetail] = useState<Movie.IMovie>()
   const [ratedFilms, setRatedFilms] = useState<Movie.IMovie[]>()
   const [creditList, setCreditList] = useState<Movie.ICredit[]>()
+  const [genreList, setGenreList] = useState<Movie.IGenre[]>()
   const params = useParams()
   const navigate = useNavigate()
   const movieUrl = import.meta.env.VITE_IMG
@@ -18,8 +19,8 @@ export default function MovieDetail() {
   async function getMovie() {
     try {
       const { data } = await api.get(`/movie/${params.id}?language=pt-BR`)
-      console.log(data);
       setMovieDetail(data)
+      setGenreList(data.genres)
     } catch (e) {
       console.log(e);
     }
@@ -27,7 +28,6 @@ export default function MovieDetail() {
   async function getRated() {
     try {
       const { data } = await api.get(`/movie/top_rated?language=pt-BR&page=1`)
-      console.log(data.results);
       setRatedFilms(data.results)
     } catch (e) {
       console.log(e);
@@ -36,35 +36,26 @@ export default function MovieDetail() {
   async function getCredits() {
     try {
       const { data } = await api.get(`/movie/${params.id}/credits?language=pt-BR`)
-      console.log(data.cast);
       setCreditList(data.cast)
     } catch (e) {
       console.log(e);
     }
   }
 
-  // async function getGenres() {
-  //   try {
-  //     const { data } = await api.get('/genre/movie/list?language=pt-BR')
-  //     console.log(data.genres);
-  //     setMovieGenre(data.genres)
-  //   } catch (e) {
-  //     console.log(e);
-  //   }
-  // }
-
   useEffect(() => {
     getMovie()
     getRated()
     getCredits()
-    // getGenres()
   }, [])
 
- return (
-    <div>
-      <header className="bg-red-900 text-white p-12 flex gap-4">
+  return (
+    <>
+      <div className='bg-rose-500 p-2 '>
+        <h3 className='font-bold text-white text-2xl'>TMDB <span className='bg-white px-8 ms-2 rounded-full'></span></h3>
+      </div>
+      <header className="bg-red-900 text-white p-12 flex md:flex-nowrap flex-wrap gap-4">
         <img
-          className="-mb-20 shadow-md rounded-md"
+          className="md:-mb-20 shadow-md rounded-md"
           width={250}
           height={350}
           src={movieUrl + movieDetail?.poster_path}
@@ -74,14 +65,15 @@ export default function MovieDetail() {
             <h1 className="text-3xl">{movieDetail?.title}</h1>
             <button className='bg-transparent border-white border-2 px-2 hover:bg-white hover:text-black' onClick={() => navigate(-1)}>voltar</button>
           </div>
-          <p>16 anos + {movieDetail?.release_date} ({movieDetail?.original_language}) +
-            {/* {movieDetail?.genres?.map((gen:any) => gen.name.join(', '))} */}
+          <p>
+            {movieDetail?.adult ? '18 anos' : 'livre'} + {movieDetail?.release_date?.split('-').reverse().join('/')} 
+            ({movieDetail?.original_language?.toLocaleUpperCase()}) + {genreList?.map((gen: Movie.IGenre) => gen.name).join(', ')}
           </p>
           <div className="flex my-4">
-            <span className="border-green-400 border-4 rounded-full p-2">
+            <span className="border-green-400 border-4 rounded-full p-2 me-2">
               {movieDetail?.vote_average?.toFixed(1)}
             </span>
-            Avaliação dos usuários
+            Avaliação dos <br /> usuários
           </div>
 
           <h4 className="font-bold">Sinopse</h4>
@@ -90,7 +82,7 @@ export default function MovieDetail() {
       </header>
       <main className="m-12">
         <h3 className="text-xl font-bold mb-4">Elenco original</h3>
-        <section className="flex w-7/12 gap-4 overflow-scroll overflow-y-hidden">
+        <section className="flex gap-4 overflow-scroll overflow-y-hidden">
           {creditList?.map(creditInfo => (
             <CreditsCard key={creditInfo.id} credit={creditInfo} />
           ))}
@@ -107,12 +99,12 @@ export default function MovieDetail() {
           ></iframe>
         </section>
         <h3 className="text-xl font-bold mb-4 mt-12">Recomendações</h3>
-        <section className="flex w-7/12 gap-4 overflow-scroll overflow-y-hidden">
+        <section className="flex gap-4 overflow-scroll overflow-y-hidden">
           {ratedFilms?.map(movieInfo => (
             <MovieCard key={movieInfo.id} movie={movieInfo} />
           ))}
         </section>
       </main>
-    </div>
+    </>
   );
 }

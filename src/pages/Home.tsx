@@ -11,7 +11,6 @@ export default function Home() {
   async function getMovies() {
     try {
       const { data } = await api.get('/movie/now_playing?language=pt-BR&page=1')
-      console.log(data.results);
       setMovieList(data.results)
     } catch (e) {
       console.log(e);
@@ -20,7 +19,6 @@ export default function Home() {
   async function getGenres() {
     try {
       const { data } = await api.get('/genre/movie/list?language=pt-BR')
-      console.log(data.genres);
       setMovieGenre(data.genres)
     } catch (e) {
       console.log(e);
@@ -36,8 +34,11 @@ export default function Home() {
 
   return (
     <>
+      <div className='bg-rose-500 p-2'>
+        <h3 className='font-extrabold text-white'>TMDB</h3>
+      </div>
       <header className="bg-red-900 text-white text-center p-12">
-        <h1 className="text-3xl mb-8">Milhares de filmes, séries e pessoas para descobrir. Explore já.</h1>
+        <h1 className="text-4xl mb-8 font-bold">Milhares de filmes, séries e pessoas <br /> para descobrir. Explore já.</h1>
         <form>
           <input className="p-2 w-7/12" type="search" placeholder="Busque o filme desejado" />
           {/* <button className="bg-white text-gray-400">Buscar</button> */}
@@ -51,7 +52,7 @@ export default function Home() {
           </div>
         </section>
       </header>
-      <main className="flex flex-wrap gap-4 p-8">
+      <main className="flex flex-wrap gap-4 p-8 justify-center">
         {movieList.map(movieInfo => (
           <MovieCard key={movieInfo.id} movie={movieInfo} />
         ))}
