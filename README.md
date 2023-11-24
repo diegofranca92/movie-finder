@@ -1,30 +1,46 @@
-# React + TypeScript + Vite
+<!-- Dark Mode
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+https://www.youtube.com/watch?v=Mu9puNcZ5WI -->
 
-Currently, two official plugins are available:
+## <h1 align="center">Movie Finder</h1>
+<hr/>
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+> :octocat: Dev responsável: [**Diego França**](https://diegofranca.vercel.app/)
+> Está aplicação está hospedada na Vercel, você pode conferir nesse [link](https://movie-finder-jade.vercel.app/)
 
-## Expanding the ESLint configuration
+### :computer: Como rodar o projeto
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+> :warning: Importante configurar as variaveis de ambiente para as chamadas a api
 
-- Configure the top-level `parserOptions` property like this:
+```bash
+# entre na pasta do projeto
+cd movie-finder
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
+# rode esse comando pra instalar as dependências do projeto
+yarn install
+npm install
+
+# rode esse comando pra iniciar a aplicação, e já pode abrir ela no browser
+yarn dev
+npm run dev
+
 ```
+### :wrench: Tecnologias utilizas
+- React
+- Vitest
+- testing-library
+- Tailwind CSS
+- TypeScript
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+### :pencil: TODO list
+
+- [x] Layout fidedigno
+- [x] Pagina de Listagem
+- [x] Pagina de detalhes do Filme
+- [x] Responsividade
+- [x] Paginação
+- [x] Testes unitários
+- [ ] Pesquisa
+- [ ] Filtros
+
+---
