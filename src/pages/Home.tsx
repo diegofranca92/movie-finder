@@ -25,8 +25,8 @@ export default function Home() {
       selectedFiltered.push(item)
       setFilterSelected(!filterSelected)
       let selectedItem = document.getElementById(item)
-      selectedItem?.classList.toggle('bg-selected')
-      selectedItem?.classList.toggle('text-white')
+      selectedItem?.classList.toggle('!bg-selected')
+      selectedItem?.classList.toggle('!text-white')
       selectedItem?.firstElementChild?.classList.toggle('hidden')
     }
     

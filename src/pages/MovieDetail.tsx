@@ -100,10 +100,9 @@ export default function MovieDetail() {
           ))}
         </section>
         <h3 className="text-xl font-bold mb-4 mt-12">Trailer</h3>
-        <section>
+        <section className='md:w-7/12 h-[400px]'>
           <iframe
-            width="560"
-            height="315"
+            className='max-w-full max-h-full'
             src={`https://www.youtube.com/embed/${videoKey}?si=ZV9nQHwiquv9HQUO`}
             title="YouTube video player"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
