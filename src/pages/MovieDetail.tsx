@@ -10,6 +10,7 @@ import { NavBar } from '../components/NavBar';
 export default function MovieDetail() {
 
   const [movieDetail, setMovieDetail] = useState<Movie.IMovie>()
+  const [videoKey, setVideoKey] = useState<string>()
   const [ratedFilms, setRatedFilms] = useState<Movie.IMovie[]>()
   const [creditList, setCreditList] = useState<Movie.ICredit[]>()
   const [genreList, setGenreList] = useState<Movie.IGenre[]>()
@@ -26,6 +27,17 @@ export default function MovieDetail() {
       console.log(e);
     }
   }
+
+  async function getVideo() {
+    try {
+      const { data } = await api.get(`/movie/${params.id}/videos?language=pt-BR`)
+      setVideoKey(data.results[0].key)
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+
   async function getRated() {
     try {
       const { data } = await api.get(`/movie/top_rated?language=pt-BR&page=1`)
@@ -47,6 +59,7 @@ export default function MovieDetail() {
     getMovie()
     getRated()
     getCredits()
+    getVideo()
   }, [])
 
   return (
@@ -91,7 +104,7 @@ export default function MovieDetail() {
           <iframe
             width="560"
             height="315"
-            src="https://www.youtube.com/embed/gfMRgap9jWk?si=ZV9nQHwiquv9HQUO"
+            src={`https://www.youtube.com/embed/${videoKey}?si=ZV9nQHwiquv9HQUO`}
             title="YouTube video player"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             allowFullScreen
