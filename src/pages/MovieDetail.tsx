@@ -11,7 +11,7 @@ export default function MovieDetail() {
 
   const [movieDetail, setMovieDetail] = useState<Movie.IMovie>()
   const [videoKey, setVideoKey] = useState<string>()
-  const [ratedFilms, setRatedFilms] = useState<Movie.IMovie[]>()
+  const [recommendationsFilms, setRecommendationsFilms] = useState<Movie.IMovie[]>()
   const [creditList, setCreditList] = useState<Movie.ICredit[]>()
   const [genreList, setGenreList] = useState<Movie.IGenre[]>()
   const params = useParams()
@@ -38,10 +38,10 @@ export default function MovieDetail() {
   }
 
 
-  async function getRated() {
+  async function getRecommendations() {
     try {
-      const { data } = await api.get(`/movie/top_rated?language=pt-BR&page=1`)
-      setRatedFilms(data.results)
+      const { data } = await api.get(`/movie/${params.id}/recommendations?language=pt-BR&page=1`)
+      setRecommendationsFilms(data.results)
     } catch (e) {
       console.log(e);
     }
@@ -57,7 +57,7 @@ export default function MovieDetail() {
 
   useEffect(() => {
     getMovie()
-    getRated()
+    getRecommendations()
     getCredits()
     getVideo()
   }, [])
@@ -100,9 +100,9 @@ export default function MovieDetail() {
           ))}
         </section>
         <h3 className="text-xl font-bold mb-4 mt-12">Trailer</h3>
-        <section className='md:w-7/12 h-[400px]'>
+        <section>
           <iframe
-            className='max-w-full max-h-full'
+           className='md:w-7/12 h-[400px]'
             src={`https://www.youtube.com/embed/${videoKey}?si=ZV9nQHwiquv9HQUO`}
             title="YouTube video player"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
@@ -111,7 +111,9 @@ export default function MovieDetail() {
         </section>
         <h3 className="text-xl font-bold mb-4 mt-12">Recomendações</h3>
         <section className="flex gap-4 overflow-scroll overflow-y-hidden">
-          {ratedFilms?.map(movieInfo => (
+         
+          {!recommendationsFilms?.length &&  <h3>Não há Recomendações para este filme</h3>}
+          {recommendationsFilms?.map(movieInfo => (
             <MovieCard key={movieInfo.id} movie={movieInfo} />
           ))}
         </section>
